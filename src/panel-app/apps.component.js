@@ -3,10 +3,16 @@ import { Scoped, always, maybe } from "kremling";
 import AppStatusOverride from "./app-status-override.component";
 import { evalDevtoolsCmd, evalCmd } from "../inspected-window.helper.js";
 
+const OFF = "off",
+  ON = "on",
+  LIST = "list",
+  PAGE = "page";
+
 export default function Apps(props) {
   const sortedApps = sortApps(props.apps);
 
   const [hovered, setHovered] = useState();
+  const [overlaysEnabled, setOverlaysEnabled] = useState("off");
 
   useEffect(() => {
     if (hovered) {
@@ -24,6 +30,19 @@ export default function Apps(props) {
 
   return (
     <Scoped css={css}>
+      <div>
+        <label htmlFor="overlayEnabledSelect">Overlays: </label>
+        <select
+          id="overlayEnabledSelect"
+          value={overlaysEnabled}
+          onChange={e => setOverlaysEnabled(e.target.value)}
+        >
+          <option value={OFF}>Off</option>
+          <option value={ON}>On</option>
+          <option value={LIST}>On list hover</option>
+          <option value={PAGE}>On page hover</option>
+        </select>
+      </div>
       <table className={"table"}>
         <thead className="table-header">
           <tr>
