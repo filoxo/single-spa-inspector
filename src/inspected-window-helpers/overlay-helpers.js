@@ -18,18 +18,12 @@ export function setupOverlayHelpers() {
   function removeOverlaysFromApp(appName) {
     const app = getAppByName(appName);
     const { selectors } = getSelectorsAndOptions(app);
-    selectors.forEach(selector => {
-      const element = document.querySelector(selector);
-      if (!element) {
-        return null;
-      }
-      const existingOverlayDiv = element.querySelector(
-        `.${overlayDivClassName}`
-      );
-      existingOverlayDiv &&
-        existingOverlayDiv.remove &&
-        existingOverlayDiv.remove();
-    });
+    const overlaySelectors = selectors.map(
+      selector => `${selector} .${overlayDivClassName}`
+    );
+    document
+      .querySelectorAll(overlaySelectors)
+      .forEach(overlayElem => overlayElem.parentNode.removeChild(overlayElem));
   }
 
   // everything after this are helper functions
