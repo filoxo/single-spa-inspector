@@ -40,12 +40,14 @@ export default function Apps(props) {
               onMouseLeave={() => setHovered()}
             >
               <td>{app.name}</td>
-              <td
-                className={always("app-status")
-                  .maybe("app-mounted", app.status === "MOUNTED")
-                  .maybe("app-not-mounted", app.status !== "MOUNTED")}
-              >
-                {app.status.replace("_", " ").toLowerCase()}
+              <td>
+                <span
+                  className={always("app-status")
+                    .maybe("app-mounted", app.status === "MOUNTED")
+                    .maybe("app-not-mounted", app.status !== "MOUNTED")}
+                >
+                  {app.status.replace("_", " ").toLowerCase()}
+                </span>
               </td>
               <td>
                 <AppStatusOverride app={app} />
@@ -137,14 +139,18 @@ body.dark {
 }
 
 & .app-status {
-  text-transform: capitalize;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 4px 2px;
+  text-transform: uppercase;  
 }
 
 & .app-mounted {
-  color: #A6E22E;
+  background-color: #A6E22E;
 }
 
 & .app-not-mounted {
-  color: #F92672;
+  background-color: #F92672;
 }
 `;
