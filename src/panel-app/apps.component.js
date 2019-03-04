@@ -9,17 +9,23 @@ const OFF = "off",
   PAGE = "page";
 
 export default function Apps(props) {
-  const sortedApps = sortApps(props.apps);
-
+  const { mounted: mountedApps, other: otherApps } = groupApps(props.apps);
   const [hovered, setHovered] = useState();
   const [overlaysEnabled, setOverlaysEnabled] = useState("off");
 
   useEffect(() => {
-    if (hovered) {
+    if (overlaysEnabled === LIST && hovered) {
       overlayApp(hovered);
       return () => deOverlayApp(hovered);
     }
-  }, [hovered]);
+  }, [overlaysEnabled, hovered]);
+
+  useEffect(() => {
+    if (overlaysEnabled === ON) {
+      mountedApps.forEach(app => overlayApp(app));
+      return () => mountedApps.forEach(app => deOverlayApp(app));
+    }
+  }, [overlaysEnabled]);
 
   useEffect(() => {
     document.body.classList.add(props.theme);
@@ -52,7 +58,7 @@ export default function Apps(props) {
           </tr>
         </thead>
         <tbody>
-          {sortedApps.map(app => (
+          {mountedApps.concat(otherApps).map(app => (
             <tr
               key={app.name}
               onMouseEnter={() => setHovered(app)}
@@ -106,6 +112,24 @@ function sortApps(apps) {
         return 0;
       }
     });
+}
+
+function groupApps(apps) {
+  const [mounted, other] = apps.reduce(
+    (list, app) => {
+      const group =
+        app.status === "MOUNTED" || !!app.devtools.activeWhenForced ? 0 : 1;
+      list[group].push(app);
+      return list;
+    },
+    [[], []]
+  );
+  mounted.sort((a, b) => a.name.localeCompare(b.name));
+  other.sort((a, b) => a.name.localeCompare(b.name));
+  return {
+    mounted,
+    other
+  };
 }
 
 function overlayApp(app) {
