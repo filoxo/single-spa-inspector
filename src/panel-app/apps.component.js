@@ -119,11 +119,16 @@ body.dark {
 }
 
 & .table {
+  border-collapse: collapse;
   width: 100%;
 }
 
 & .table td, .table th {
   padding: 2px 8px;
+}
+
+& .table tbody tr:hover {
+  background-color: #353B48;
 }
 
 & .table-header {
