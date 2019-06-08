@@ -153,7 +153,15 @@ const css = `
 }
 
 & .table td, .table th {
-  padding: 2px 8px;
+  padding: 4px 8px;
+}
+
+.table tbody tr {
+  transition: background-color .15s ease-out;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(128, 128, 128, .25);
 }
 
 & .table tbody tr:hover {
